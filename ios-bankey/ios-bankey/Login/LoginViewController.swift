@@ -1,6 +1,12 @@
 import UIKit
 
+protocol LoginViewControllerDelegate: AnyObject {
+    func didLogin()
+}
+
 class LoginViewController: UIViewController {
+    
+    weak var delegate: LoginViewControllerDelegate?
     
     let titleLabel = UILabel()
     let subtitleLabel = UILabel()
@@ -21,6 +27,11 @@ class LoginViewController: UIViewController {
         
         style()
         layout()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        signInButton.configuration?.showsActivityIndicator = false
     }
 }
 
@@ -116,9 +127,12 @@ extension LoginViewController {
             assertionFailure("Username and password should never be nil")
             return
         }
-        if username.isEmpty || password.isEmpty { configureView(withMessage: "Username and password cannot be blank") }
-        if username == "Manoel" && password == "123456" {
+        
+        //if username.isEmpty || password.isEmpty { configureView(withMessage: "Username and password cannot be blank") }
+        
+        if username == "" && password == "" {
             signInButton.configuration?.showsActivityIndicator = true
+            delegate?.didLogin()
         } else {
             
         }
